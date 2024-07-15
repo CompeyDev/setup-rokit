@@ -43,7 +43,10 @@ runs:
 
     - name: Discover manifest file
       id: manifest
-      run: echo "path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml")" >> $GITHUB_OUTPUT
+      run: |
+        manifest_path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml")
+        echo "::debug $manifest_path"
+        echo "path=$manifest_path" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Cache binaries
