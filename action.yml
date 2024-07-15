@@ -1,6 +1,6 @@
 name: setup-rokit
 description: GitHub action to install and run rokit; a toolchain manager.
-author: ok-nick
+author: CompeyDev
 
 inputs:
   version:
