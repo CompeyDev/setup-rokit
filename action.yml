@@ -40,13 +40,14 @@ runs:
         EOF
       shell: bash
 
-
     - name: Discover manifest file
       id: manifest
       run: |
         manifest_path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml")
-        echo "::debug $manifest_path"
+        echo "::debug Discovered manifest path: $manifest_path"
+
         echo "path=$manifest_path" >> $GITHUB_OUTPUT
+        echo "hash=${{hashFiles(format('{0}/$manifest_path', inputs.path))}}" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Cache binaries
@@ -56,7 +57,7 @@ runs:
         path: |
           ~/.rokit/bin
           ~/.rokit/tool-storage
-        key: ${{ runner.os }}-rokit-${{hashFiles(format('{0}/{1}', inputs.path, '${{ steps.manifest.outputs.path }}'))}}
+        key: ${{ runner.os }}-rokit-${{ steps.manifest.outputs.hash }}
 
     - name: Install tools
       run: |
