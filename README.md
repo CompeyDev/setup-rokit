@@ -20,7 +20,7 @@ For a list of default parameter values, [check here](https://github.com/CompeyDe
 For more advanced cases, use the parameters below.
 ```yaml
 steps:
-- uses: CompeyDev/setup-rokit@v0.4.2
+- uses: CompeyDev/setup-rokit@v0.1.0
   with:
     version: v1.0.0 # name of git tag in rokit (uses latest tag by default)
     path: some_dir/my_project # path to project dir containing a `rokit.toml`, `aftman.toml`, or `foreman.toml` ("." (current dir) by default)
@@ -49,5 +49,5 @@ In any case, it is recommended to benchmark before enabling this feature.
 Set to a GitHub token to be used by `rokit` to increase the GitHub rate-limit. Note, these two options, `${{ github.token }}` and `${{ secrets.GITHUB_TOKEN }}`, are equivalent and passed by default. **Thus, you do not need to specify this parameter unless you are using a token different from the owner of the repository.**
 
 ## Credits
-[@nezuo](https://github.com/ok-nick) - Creating `setup-aftman` which `setup-rokit` is a fork of
+[@ok-nick](https://github.com/ok-nick) - Creating `setup-aftman` which `setup-rokit` is a fork of
 
