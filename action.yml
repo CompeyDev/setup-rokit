@@ -22,10 +22,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install rokit
-      run: curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | sh
+    - name: Install Rokit
+      run: | 
+        curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | sh
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
+      shell: bash
+
+    - name: Add Rokit to PATH
+      run: echo "$HOME/.rokit/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: Create auth file
