@@ -44,7 +44,7 @@ runs:
       id: manifest
       run: |
         manifest_path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml")
-        echo "::debug Discovered manifest path: $manifest_path"
+        echo "::debug::Discovered manifest path: $manifest_path"
 
         echo "path=$manifest_path" >> $GITHUB_OUTPUT
         echo "hash=${{hashFiles(format('{0}/$manifest_path', inputs.path))}}" >> $GITHUB_OUTPUT
