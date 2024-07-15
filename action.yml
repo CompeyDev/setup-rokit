@@ -46,10 +46,6 @@ runs:
         manifest_path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml")
         echo "::debug::Discovered manifest path: $manifest_path"
         echo "path=$manifest_path" >> $GITHUB_OUTPUT
-
-        manifest_hash=${{hashFiles(manifest_path)}}
-        echo "::debug::Computed manifest hash: $manifest_hash"
-        echo "hash=$manifest_hash" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Cache binaries
@@ -59,7 +55,7 @@ runs:
         path: |
           ~/.rokit/bin
           ~/.rokit/tool-storage
-        key: ${{ runner.os }}-rokit-${{ steps.manifest.outputs.hash }}
+        key: ${{ runner.os }}-rokit-${{hashFiles(steps.manifest.outputs.path)}}
 
     - name: Install tools
       run: |
