@@ -26,7 +26,7 @@ runs:
       run: |
         case ${{ runner.os }} in
           Linux|macOS) curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash -s - $(echo ${{ inputs.version }} | tr -d v) ;;
-          Windows) gh release download ${{ inputs.version }} --repo rojo-rbx/rokit --pattern *windows-x86_64.zip ;;
+          Windows) gh release download ${{ inputs.version }} --repo rojo-rbx/rokit --pattern *windows-x86_64.zip && unzip rokit-*.zip && ./rokit.exe self-install ;;
         esac
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
