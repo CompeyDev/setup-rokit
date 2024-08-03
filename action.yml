@@ -24,7 +24,7 @@ runs:
   steps:
     - name: Install Rokit
       run: | 
-        curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | sh
+        curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
