@@ -2,7 +2,6 @@
   <h1><code>setup-rokit</code></h1>
   <p>
     <a href="https://github.com/CompeyDev/setup-rokit/actions?query=workflow%3ACI"><img src="https://github.com/CompeyDev/setup-rokit/workflows/CI/badge.svg" alt="CI" /></a>
-<!--     <a href="https://discord.gg/w9Bc6xH7uC"><img src="https://img.shields.io/discord/834969350061424660?label=discord" alt="discord" /></a> -->
   </p>
 </div>
 
