@@ -22,14 +22,33 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Rokit
+    - name: Download Rokit
       run: |
         case ${{ runner.os }} in
-          Linux|macOS) curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash -s - $(echo ${{ inputs.version }} | tr -d v) ;;
-          Windows) gh release download ${{ inputs.version }} --repo rojo-rbx/rokit --pattern *windows-x86_64.zip && unzip rokit-*.zip && ./rokit.exe self-install ;;
+          Linux) pattern="*linux-x86_64.zip" ;;
+          macOS) pattern="*macos-x86_64.zip" ;;
+          Windows) pattern="*windows-x86_64.zip" ;;
         esac
+
+        gh release download ${{ inputs.version }} --repo rojo-rbx/rokit --pattern $pattern
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
+      shell: bash
+
+    - name: Install Rokit
+      run: |
+        unzip rokit*.zip
+        ./rokit self-install
+      shell: bash
+
+    - name: Delete artifacts
+      run: |
+        rm rokit*.zip
+        if ${{ runner.os == 'Windows' }}; then
+          rm rokit.exe
+        else
+          rm rokit
+        fi
       shell: bash
 
     - name: Add Rokit to PATH
