@@ -24,31 +24,9 @@ runs:
   steps:
     - name: Download Rokit
       run: |
-        case ${{ runner.os }} in
-          Linux) pattern="*linux-x86_64.zip" ;;
-          macOS) pattern="*macos-x86_64.zip" ;;
-          Windows) pattern="*windows-x86_64.zip" ;;
-        esac
-
-        gh release download ${{ inputs.version }} --repo rojo-rbx/rokit --pattern $pattern
+        curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash
       env:
-        GITHUB_TOKEN: ${{ inputs.token }}
-      shell: bash
-
-    - name: Install Rokit
-      run: |
-        unzip rokit*.zip
-        ./rokit self-install
-      shell: bash
-
-    - name: Delete artifacts
-      run: |
-        rm rokit*.zip
-        if ${{ runner.os == 'Windows' }}; then
-          rm rokit.exe
-        else
-          rm rokit
-        fi
+        GITHUB_PAT: ${{ inputs.token }}
       shell: bash
 
     - name: Add Rokit to PATH
@@ -61,7 +39,7 @@ runs:
       run: echo "$HOME/.rokit/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       shell: powershell
 
-    - name: Create auth file
+    - name: Authenticate
       run: rokit authenticate github --token ${{ inputs.token }}
       shell: bash
 
