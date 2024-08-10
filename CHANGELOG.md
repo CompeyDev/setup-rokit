@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2024-08-10
+### Changed
+- Now uses the official installer script internally for installing Rokit
+- Used `authenticate` command instead of manually writing file
+
 ## [0.1.0] - 2024-08-04
 ### Added
 - Initial release, with support for rokit instead of aftman
 
-[Unreleased]: https://github.com/CompeyDev/setup-rokit/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/CompeyDev/setup-rokit/compare/v0.1.1...HEAD
 [0.1.0]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.1.0
+[0.1.1]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.1.1
