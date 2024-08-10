@@ -1,7 +1,7 @@
 <div align="center">
   <h1><code>setup-rokit</code></h1>
   <p>
-    <a href="https://github.com/CompeyDev/setup-rokit/actions?query=workflow%3ACI"><img src="https://github.com/CompeyDev/setup-rokit/workflows/CI/badge.svg" alt="CI" /></a>
+    <a href="https://github.com/CompeyDev/setup-rokit/actions?query=workflow%3Atest"><img src="https://github.com/CompeyDev/setup-rokit/workflows/test/badge.svg" alt="CI" /></a>
   </p>
 </div>
 
