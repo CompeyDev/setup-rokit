@@ -62,10 +62,7 @@ runs:
       shell: powershell
 
     - name: Create auth file
-      run: |
-        cat > $HOME/.rokit/auth.toml << EOF
-        github = "${{ inputs.token }}"
-        EOF
+      run: rokit authenticate github --token ${{ inputs.token }}
       shell: bash
 
     - name: Discover manifest file
