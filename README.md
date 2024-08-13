@@ -11,7 +11,7 @@ GitHub action to install and run [rokit](https://github.com/rojo-rbx/rokit); a t
 Use the latest released version of `rokit` with default parameters:
 ```yaml
 steps:
-- uses: CompeyDev/setup-rokit@v0.1.1
+- uses: CompeyDev/setup-rokit@v0.1.2
 ```
 For a list of default parameter values, [check here](https://github.com/CompeyDev/setup-rokit/blob/main/action.yml#L5-L20).
 
@@ -19,7 +19,7 @@ For a list of default parameter values, [check here](https://github.com/CompeyDe
 For more advanced cases, use the parameters below.
 ```yaml
 steps:
-- uses: CompeyDev/setup-rokit@v0.1.1
+- uses: CompeyDev/setup-rokit@v0.1.2
   with:
     version: v1.0.0 # name of git tag in rokit (uses latest tag by default)
     path: some_dir/my_project # path to project dir containing a `rokit.toml`, `aftman.toml`, or `foreman.toml` ("." (current dir) by default)
