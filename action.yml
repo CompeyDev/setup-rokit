@@ -46,7 +46,7 @@ runs:
     - name: Discover manifest file
       id: manifest
       run: |
-        manifest_path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml")
+        manifest_path=$(find ${{ inputs.path }} -maxdepth 1 -name "rokit.toml" -o -name "aftman.toml" -o -name "foreman.toml" | head -n 1)
         echo "::debug::Discovered manifest path: $manifest_path"
         echo "path=$manifest_path" >> $GITHUB_OUTPUT
       shell: bash
