@@ -19,138 +19,62 @@ jobs:
     uses: ./.github/workflows/env.yml
     with:
       cache: true
+
   test-no-cache:
     uses: ./.github/workflows/env.yml
     with:
       cache: false
 
-  test-versions:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - version: ""
-            version_label: "latest"
-            version_check_pattern: ""
+  test-latest:
+      uses: ./.github/workflows/versions.yml
+      with:
+        version_label: "latest version"
 
-          - version: "v1.2.0"
-            version_label: "exact-v1.2.0"
-            version_check_pattern: "1.2.0"
+  test-exact-with-prefix:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "v1.2.0"
+      version_label: "exact v1.2.0 (with prefix)"
+      version_check_pattern: "1.2.0"
 
-          - version: "1.2.0"
-            version_label: "exact-no-prefix-1.2.0"
-            version_check_pattern: "1.2.0"
+  test-exact-no-prefix:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "1.2.0"
+      version_label: "exact 1.2.0 (no prefix)"
+      version_check_pattern: "1.2.0"
 
-          - version: "v1.1"
-            version_label: "fuzzy-v1.1"
-            version_check_pattern: "1.1."
+  test-fuzzy-minor-with-prefix:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "v1.1"
+      version_label: "fuzzy v1.1 (minor)"
+      version_check_pattern: "1.1."
 
-          - version: "1.1"
-            version_label: "fuzzy-no-prefix-1.1"
-            version_check_pattern: "1.1."
+  test-fuzzy-minor-no-prefix:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "1.1"
+      version_label: "fuzzy 1.1 (minor, no prefix)"
+      version_check_pattern: "1.1."
 
-          - version: "v1"
-            version_label: "fuzzy-major-v1"
-            version_check_pattern: "1."
+  test-fuzzy-major-with-prefix:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "v1"
+      version_label: "fuzzy v1 (major)"
+      version_check_pattern: "1."
 
-          - version: "1"
-            version_label: "fuzzy-major-no-prefix-1"
-            version_check_pattern: "1."
+  test-fuzzy-major-no-prefix:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "1"
+      version_label: "fuzzy 1 (major, no prefix)"
+      version_check_pattern: "1."
 
-          - version: "v1.0.0"
-            version_label: "exact-v1.0.0"
-            version_check_pattern: "1.0.0"
-
-    runs-on: ${{ matrix.os }}
-    name: version-${{ matrix.version_label }} (${{ matrix.os }})
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Create rokit manifest
-        run: |
-          cat > rokit.toml << EOF
-          [tools]
-          selene = "Kampfkarren/selene@0.30.1"
-          EOF
-
-      - name: Run setup-rokit
-        uses: ./
-        with:
-          version: ${{ matrix.version }}
-
-      - name: Verify Rokit is installed
-        run: rokit --version
-
-      - name: Verify Rokit version matches pattern
-        run: |
-          VERSION_OUTPUT=$(rokit --version)
-          echo "Rokit version output: $VERSION_OUTPUT"
-
-          if [ -n "${{ matrix.version_check_pattern }}" ]; then
-            if [[ "$VERSION_OUTPUT" != *"${{ matrix.version_check_pattern }}"* ]]; then
-              echo "ERROR: Version output '$VERSION_OUTPUT' does not contain expected pattern '${{ matrix.version_check_pattern }}'"
-              exit 1
-            fi
-            echo "SUCCESS: Version matches expected pattern '${{ matrix.version_check_pattern }}'"
-          else
-            echo "SUCCESS: Rokit installed (latest version check)"
-          fi
-
-      - name: Verify selene is installed
-        run: command -v selene && echo "selene found"
-
-  test-paths:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        path: [".", "subdir", "nested/project"]
-
-    runs-on: ${{ matrix.os }}
-    name: path-${{ matrix.path }} (${{ matrix.os }})
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Create project directory
-        run: mkdir -p ${{ matrix.path }}
-
-      - name: Create Rokit manifest in custom path
-        run: |
-          cat > ${{ matrix.path }}/rokit.toml << EOF
-          [tools]
-          stylua = "JohnnyMorganz/StyLua@2.4.1"
-          EOF
-
-      - name: Run setup-rokit with custom path
-        uses: ./
-        with:
-          path: ${{ matrix.path }}
-
-      - name: Verify StyLua is installed
-        run: |
-          command -v stylua && echo "stylua found"
-
-  test-auth:
-    runs-on: ubuntu-latest
-    name: auth-with-token
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Create Rokit manifest
-        run: |
-          cat > rokit.toml << EOF
-          [tools]
-          rojo = "lune-org/lune@0.10.4"
-          EOF
-
-      - name: Run setup-rokit with explicit token
-        uses: ./
-        with:
-          token: ${{ github.token }}
-
-      - name: Verify Lune is installed
-        run: command -v lune && lune "lune found"
+  test-exact-old-version:
+    uses: ./.github/workflows/versions.yml
+    with:
+      version: "v1.0.0"
+      version_label: "exact v1.0.0 (old version)"
+      version_check_pattern: "1.0.0"

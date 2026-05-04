@@ -1,0 +1,56 @@
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: false
+
+      version_label:
+        type: string
+        required: true
+
+      version_check_pattern:
+        type: string
+        required: false
+
+jobs:
+  test-version:
+    runs-on: ${{ matrix.os }}
+    name: Versions - ${{ inputs.version_label }} (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Create Rokit manifest
+        run: |
+          cat > rokit.toml << EOF
+          [tools]
+          selene = "Kampfkarren/selene@0.30.1"
+          EOF
+
+      - name: Run setup-rokit
+        uses: ./
+        with:
+          version: ${{ inputs.version }}
+
+      - name: Verify Rokit is installed
+        run: rokit --version
+
+      - name: Verify Rokit version matches pattern
+        run: |
+          VERSION_OUTPUT=$(rokit --version)
+          echo "Rokit version output: $VERSION_OUTPUT"
+
+          if [ -n "${{ inputs.version_check_pattern }}" ]; then
+            if [[ "$VERSION_OUTPUT" != *"${{ inputs.version_check_pattern }}"* ]]; then
+              echo "ERROR: Version output '$VERSION_OUTPUT' does not contain expected pattern '${{ inputs.version_check_pattern }}'"
+              exit 1
+            fi
+            echo "SUCCESS: Version matches expected pattern '${{ inputs.version_check_pattern }}'"
+          else
+            echo "SUCCESS: Rokit installed (latest version check)"
+          fi
