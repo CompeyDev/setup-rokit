@@ -13,6 +13,10 @@ on:
         type: string
         required: false
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   test-version:
     runs-on: ${{ matrix.os }}
