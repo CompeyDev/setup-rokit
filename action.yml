@@ -25,6 +25,7 @@ runs:
     - name: Download Rokit
       run: ./install.sh
       env:
+        ROKIT_VERSION: ${{ inputs.version }}
         GITHUB_PAT: ${{ inputs.token }}
       shell: bash
 

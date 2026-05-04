@@ -98,7 +98,7 @@ esac
 # and WILL break if the version contains extra metadata / pre-release
 VERSION_PATTERN="[0-9]*\\.[0-9]*\\.[0-9]*"
 API_URL="https://api.github.com/repos/$REPOSITORY/releases/latest"
-if [ ! -z "$1" ]; then
+if [ ! -z "$ROKIT_VERSION" ]; then
     # Strip leading 'v' prefix if present, then build a prefix-anchored semver
     # pattern to support fuzzy versions like "1", "1.2", or "1.2.3".
     # Examples:
@@ -106,7 +106,7 @@ if [ ! -z "$1" ]; then
     #   "1.2"   -> matches 1.2.Y  (e.g. 1.2.0, 1.2.99)
     #   "1.2.3" -> matches 1.2.3  (exact)
     #   "v1.2"  -> same as "1.2" (v prefix stripped)
-    INPUT_VERSION="${1#v}"
+    INPUT_VERSION="${ROKIT_VERSION#v}"
 
     # Count dots to determine how specific the version is
     DOT_COUNT="${INPUT_VERSION//[^.]}"
