@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [0.2.0] - 2026-05-04
+### Breaking Changes
+- Updated `actions/cache` dependency to v5, requiring at least node v24 and actions runner v2.327.1
 ### Added
 - Fuzzy semver matching: versions such as v1, v1.1, etc. will get resolved to the latest matching
   semver version
@@ -14,8 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test cases for installation and version resolution
 ### Fixed
 - The version input is actually respected, it was previously ignored and defaulted to the latest release
-### Changed
-- Updated `actions/cache` dependency to v5, requiring at least node v24 and actions runner v2.327.1
 
 ## [0.1.2] - 2024-08-13
 ### Fixed
