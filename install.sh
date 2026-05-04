@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
 
 #
-# Sourced from https://github.com/rojo-rbx/rokit/blob/36a5619/scripts/install.sh
+# Credits
+# =======
 #
-# A copy of the verbatim MIT license has been produced below:
+# Original script: https://github.com/rojo-rbx/rokit/blob/36a5619/scripts/install.sh
 #
-# ```
+# Modified for CompeyDev/setup-rokit:
+#   - Fuzzy version matching (e.g. "1", "1.2" in addition to "1.2.3")
+#   - Optional leading "v" prefix on version argument (v1.2.3 and 1.2.3 both work)
+#   - Switches to the releases list endpoint for fuzzy lookups so the newest
+#     qualifying release is selected automatically
+#
+
+#
+# License
+# =======
+# The original script was licensed under the MIT. Changes have been licensed under
+# the same, with different copyright holders.
+#
+# A copy of the original license has been produced verbatim below:
+#
 #   Copyright (c) 2024
 
 #   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +40,6 @@
 #   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #   SOFTWARE.
-# ```
 #
 
 PROGRAM_NAME="rokit"
@@ -85,10 +99,36 @@ esac
 VERSION_PATTERN="[0-9]*\\.[0-9]*\\.[0-9]*"
 API_URL="https://api.github.com/repos/$REPOSITORY/releases/latest"
 if [ ! -z "$1" ]; then
-    # Fetch a specific version from given script argument
-    VERSION_PATTERN="$1"
-    API_URL="https://api.github.com/repos/$REPOSITORY/releases/tags/v$1"
-    printf "\n[1 / 3] Looking for $PROGRAM_NAME release with tag 'v$1'\n"
+    # Strip leading 'v' prefix if present, then build a prefix-anchored semver
+    # pattern to support fuzzy versions like "1", "1.2", or "1.2.3".
+    # Examples:
+    #   "1"     -> matches 1.X.Y  (e.g. 1.0.0, 1.23.456)
+    #   "1.2"   -> matches 1.2.Y  (e.g. 1.2.0, 1.2.99)
+    #   "1.2.3" -> matches 1.2.3  (exact)
+    #   "v1.2"  -> same as "1.2" (v prefix stripped)
+    INPUT_VERSION="${1#v}"
+
+    # Count dots to determine how specific the version is
+    DOT_COUNT="${INPUT_VERSION//[^.]}"
+    DOT_COUNT="${#DOT_COUNT}"
+
+    if [ "$DOT_COUNT" -eq 0 ]; then
+        # Major only: e.g. "1" matches "1.X.Y"
+        VERSION_PATTERN="${INPUT_VERSION}\\.[0-9]*\\.[0-9]*"
+        # Use the GitHub list endpoint and filter locally (no exact tag to target)
+        API_URL="https://api.github.com/repos/$REPOSITORY/releases"
+        printf "\n[1 / 3] Looking for latest $PROGRAM_NAME release matching v${INPUT_VERSION}.x.x\n"
+    elif [ "$DOT_COUNT" -eq 1 ]; then
+        # Major.minor only: e.g. "1.2" matches "1.2.Y"
+        VERSION_PATTERN="${INPUT_VERSION}\\.[0-9]*"
+        API_URL="https://api.github.com/repos/$REPOSITORY/releases"
+        printf "\n[1 / 3] Looking for latest $PROGRAM_NAME release matching v${INPUT_VERSION}.x\n"
+    else
+        # Full semver: e.g. "1.2.3", exact tag lookup
+        VERSION_PATTERN="$INPUT_VERSION"
+        API_URL="https://api.github.com/repos/$REPOSITORY/releases/tags/v$INPUT_VERSION"
+        printf "\n[1 / 3] Looking for $PROGRAM_NAME release with tag 'v${INPUT_VERSION}'\n"
+    fi
 else
     # Fetch the latest release from the GitHub API
     printf "\n[1 / 3] Looking for latest $PROGRAM_NAME release\n"
@@ -106,12 +146,16 @@ fi
 
 # Check if the release was fetched successfully
 if [ -z "$RELEASE_JSON_DATA" ] || [[ "$RELEASE_JSON_DATA" == *"Not Found"* ]]; then
-    echo "ERROR: Latest release was not found. Please check your network connection." >&2
+    echo "ERROR: Release was not found. Please check your network connection and version string." >&2
     exit 1
 fi
 
 # Try to extract the asset url from the response by searching for a
-# matching asset name, and then picking the "url" that came before it
+# matching asset name, and then picking the "url" that came before it.
+#
+# When using the list endpoint (fuzzy versions), the JSON contains multiple
+# releases ordered newest-first. We pick the FIRST asset whose name matches
+# FILE_PATTERN, which is therefore the most recent qualifying release.
 RELEASE_ASSET_ID=""
 RELEASE_ASSET_NAME=""
 while IFS= read -r current_line; do
@@ -136,7 +180,7 @@ while IFS= read -r current_line; do
 done <<< "$RELEASE_JSON_DATA"
 
 if [ -z "$RELEASE_ASSET_ID" ] || [ -z "$RELEASE_ASSET_NAME" ]; then
-    echo "ERROR: Failed to find asset that matches the pattern \"$FILE_PATTERN\" in the latest release." >&2
+    echo "ERROR: Failed to find asset that matches the pattern \"$FILE_PATTERN\" in the release listing." >&2
     exit 1
 fi
 
