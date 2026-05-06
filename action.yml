@@ -23,7 +23,7 @@ runs:
   using: "composite"
   steps:
     - name: Download Rokit
-      run: ./install.sh
+      run: ${{ github.action_path }}/install.sh
       env:
         ROKIT_VERSION: ${{ inputs.version }}
         GITHUB_PAT: ${{ inputs.token }}
