@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-06
+### Fixed
+- Install step always failing outside repo CI due to install script never being in path
+
 ## [0.2.0] - 2026-05-04
 ### Breaking Changes
 - Updated `actions/cache` dependency to v5, requiring at least node v24 and actions runner v2.327.1
@@ -34,8 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release, with support for rokit instead of aftman
 
-[Unreleased]: https://github.com/CompeyDev/setup-rokit/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/CompeyDev/setup-rokit/compare/v0.2.1...HEAD
 [0.1.0]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.1.0
 [0.1.1]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.1.1
 [0.1.2]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.1.2
 [0.2.0]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.2.0
+[0.2.1]: https://github.com/CompeyDev/setup-rokit/releases/tag/v0.2.1
