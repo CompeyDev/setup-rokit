@@ -13,7 +13,7 @@ Use the latest released version of `rokit` with default parameters:
 
 ```yaml
 steps:
-    - uses: CompeyDev/setup-rokit@v0.2.0
+    - uses: CompeyDev/setup-rokit@v0.2.1
 ```
 
 For a list of default parameter values, [check here](https://github.com/CompeyDev/setup-rokit/blob/main/action.yml#L5-L20).
@@ -24,7 +24,7 @@ For more advanced cases, use the parameters below.
 
 ```yaml
 steps:
-    - uses: CompeyDev/setup-rokit@v0.2.0
+    - uses: CompeyDev/setup-rokit@v0.2.1
       with:
           version: v1                # name of git tag in rokit (uses latest tag by default)
           path: some_dir/my_project  # path to project dir containing a `rokit.toml`, `aftman.toml`, or `foreman.toml` ("." (current dir) by default)
